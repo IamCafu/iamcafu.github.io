@@ -1,0 +1,36 @@
+/* ========================================
+   LINK STYLES
+   Animated underlines and hover states
+   ======================================== */
+
+@layer base {
+  a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    background-image: none;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      text-decoration-color var(--duration-fast) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+    text-decoration-color: var(--color-accent-underline-strong);
+  }
+
+  p a:not(.hero-highlight),
+  li a:not(.hero-highlight) {
+    color: var(--color-accent);
+    background-image: none;
+    text-decoration: underline;
+  }
+
+  p a:not(.hero-highlight):hover,
+  li a:not(.hero-highlight):hover {
+    color: var(--color-accent-hover);
+    background-image: none;
+  }
+}

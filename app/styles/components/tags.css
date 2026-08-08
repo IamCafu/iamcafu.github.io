@@ -1,0 +1,90 @@
+/* ========================================
+   TAG COMPONENTS
+   Tech tags, skill tags, and chips
+   ======================================== */
+
+/* Container for all skill groups. Tighter than before: the groups no longer
+   carry separator rules, so they do not need 3.5rem of air between them. */
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.skill-group {
+  text-align: left;
+}
+
+@media (max-width: 736px) {
+  .skill-group {
+    text-align: center;
+  }
+}
+
+/* A group label, not a section heading — the accent underline that used to sit
+   here competed with the section title above it. */
+.skill-group-title {
+  color: var(--color-fg-light);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-3);
+  text-transform: uppercase;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 736px) {
+  .skill-tags {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 736px) {
+  .skill-tags {
+    justify-content: center;
+  }
+}
+
+/* One uniform pill. Size no longer encodes a self-rated competency, so the
+   three size variants and the per-category accent border are both gone. */
+.skill-tag {
+  align-items: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  color: var(--color-fg);
+  display: inline-flex;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 0.45em 0.9em;
+  white-space: nowrap;
+}
+
+/* Tech tags - pill style for project cards */
+.tech-tag {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent-border);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.project-card--linked:hover .tech-tag {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
