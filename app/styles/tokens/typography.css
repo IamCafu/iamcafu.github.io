@@ -1,0 +1,49 @@
+/* ========================================
+   TYPOGRAPHY TOKENS
+   Font families, sizes, weights, and spacing
+   ======================================== */
+
+@theme {
+  /* ===================
+     FONT FAMILIES
+     =================== */
+  --font-sans: var(--font-roboto-mono), 'Roboto Mono', Menlo, Monaco, monospace;
+  --font-heading: var(--font-roboto-mono), 'Roboto Mono', Menlo, Monaco, monospace;
+  --font-mono: var(--font-roboto-mono), 'Roboto Mono', Menlo, Monaco, monospace;
+
+  /* ===================
+     FONT WEIGHTS
+     =================== */
+  --font-weight-normal: 400;
+  --font-weight-medium: 700;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 700;
+  --font-weight-black: 700;
+
+  /* ===================
+     FONT SIZES (relative units)
+     =================== */
+  --text-xs: 0.72em;
+  --text-sm: 0.82em;
+  --text-base: 1em;
+  --text-md: 1.1em;
+  --text-lg: 1.3em;
+  --text-xl: 1.5em;
+  --text-2xl: 1.8em;
+  --text-3xl: 2.5em;
+}
+
+@theme inline {
+  /* ===================
+     LETTER SPACING
+     =================== */
+  --tracking-tight: 0;
+  --tracking-normal: 0;
+  --tracking-wide: 0;
+
+  /* ===================
+     LINE HEIGHTS
+     =================== */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+}

@@ -1,0 +1,53 @@
+/* ========================================
+   COLOR TOKENS
+   Core color palette and semantic colors
+   ======================================== */
+
+@theme {
+  /* ===================
+     CORE PALETTE
+     =================== */
+  --color-bg: oklch(98.48% 0 0);
+  --color-bg-alt: oklch(98.48% 0 0);
+  --color-bg-offset: color-mix(in oklch, oklch(26.99% 0.0096 235.05) 5%, transparent);
+  --color-fg: oklch(26.99% 0.0096 235.05);
+  --color-fg-bold: oklch(18.15% 0 0);
+  --color-fg-light: oklch(44.6% 0.03 256.802);
+
+  /* ===================
+     ACCENT COLORS
+     =================== */
+  --color-accent: oklch(55.27% 0.195 19.06);
+  --color-accent-secondary: oklch(55.44% 0.0431 185.69);
+  --color-accent-hover: oklch(55.44% 0.0431 185.69);
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  --color-accent-muted: color-mix(in srgb, var(--color-accent) 3%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
+
+  /* ===================
+     BORDER COLORS
+     =================== */
+  --color-border: color-mix(in oklch, var(--color-fg) 18%, transparent);
+  --color-border-bg: color-mix(in oklch, var(--color-fg) 10%, transparent);
+  --color-border-alt: color-mix(in oklch, var(--color-fg) 30%, transparent);
+
+  /* ===================
+     SURFACE TOKENS
+     =================== */
+  --color-surface-subtle: color-mix(in oklch, var(--color-fg) 5%, transparent);
+  --color-surface-hover: color-mix(in oklch, var(--color-fg) 8%, transparent);
+  --color-surface-active: color-mix(in oklch, var(--color-fg) 12%, transparent);
+  --color-fg-muted: color-mix(in oklch, var(--color-fg) 70%, transparent);
+
+  /* ===================
+     SEMANTIC COLORS
+     =================== */
+  --color-white: #fff;
+  --color-overlay-light: rgba(255, 255, 255, 0.15);
+  --color-overlay-dark: rgba(0, 0, 0, 0.15);
+  --color-overlay-darker: rgba(0, 0, 0, 0.3);
+}

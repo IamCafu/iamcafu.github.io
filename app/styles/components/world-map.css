@@ -1,0 +1,204 @@
+/* ========================================
+   WORLD MAP
+   Countries visited, shown under the Kazakhstan map (about page)
+   Frame and caption mirror travel-map.css
+   ======================================== */
+
+.world-map {
+  --world-map-land: var(--color-surface-subtle);
+  --world-map-border: var(--color-border-alt);
+  /* Mixing toward the foreground darkens this in light mode and lightens it in
+     dark mode, so the outline contrasts with the accent fill either way. Mixed
+     in oklab, not oklch: oklch would interpolate hue and land on magenta. */
+  --world-map-visited-border: color-mix(in oklab, var(--color-accent) 60%, var(--color-fg));
+  /* Home country: the palette's secondary accent, same treatment */
+  --world-map-home: var(--color-accent-secondary);
+  --world-map-home-border: color-mix(in oklab, var(--color-accent-secondary) 60%, var(--color-fg));
+
+  margin: var(--spacing-6) 0;
+}
+
+.world-map-frame {
+  padding: var(--spacing-5) var(--spacing-4);
+  border: 1px solid var(--color-border-bg);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.world-map-plot {
+  position: relative;
+  width: 100%;
+}
+
+.world-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: fade-in var(--duration-slow) var(--ease-out) both;
+}
+
+.world-map-countries path {
+  fill: var(--world-map-land);
+  stroke: var(--world-map-border);
+  stroke-width: 0.7;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* A heavier outline in its own color, so neighbours like Russia and Kazakhstan
+   stay separate instead of merging into one shape. */
+.world-map-countries--visited path,
+.world-map-countries--home path {
+  fill: var(--color-accent);
+  stroke: var(--world-map-visited-border);
+  stroke-width: 1.4;
+  animation: fade-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: var(--duration-normal);
+}
+
+.world-map-countries--home path {
+  fill: var(--world-map-home);
+  stroke: var(--world-map-home-border);
+}
+
+/* ===================
+   FLAG FILLS
+   Same in both themes - a flag keeps its own colors
+   =================== */
+
+.world-map-flag {
+  animation: fade-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: var(--duration-normal);
+}
+
+/* The flat fill stays as a fallback, but its stroke would bleed outside the
+   clipped flag in the relation's color, so the outline below owns the border. */
+.world-map-countries path.world-map-country--flagged {
+  stroke: none;
+}
+
+/* Neutral and heavier than the other highlights: a flag can be pale (Japan's
+   white field) and needs a border strong enough to hold its shape. */
+.world-map-flag-outline {
+  stroke: var(--color-fg);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.world-map-legend-flag {
+  width: 1rem;
+  height: 0.5rem;
+  border-radius: 1px;
+  object-fit: cover;
+}
+
+/* ===================
+   CURRENT LOCATION
+   =================== */
+
+/* Zero-size anchor at the pinned coordinate; dot and label hang off it. */
+.world-map .world-map-now {
+  position: absolute;
+  left: var(--pin-left);
+  top: var(--pin-top);
+  width: 0;
+  height: 0;
+  margin: 0;
+  animation: fade-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: var(--duration-menu);
+}
+
+.world-map-now-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 5px var(--color-accent-light);
+  transform: translate(-50%, -50%);
+}
+
+.world-map-now-label {
+  position: absolute;
+  left: 0.8rem;
+  top: 0;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--color-fg-bold);
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+.world-map-caption {
+  margin-top: var(--spacing-3);
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.world-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1) var(--spacing-5);
+}
+
+/* Flex items, so the swatch spans below can take a width and height */
+.world-map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.world-map-legend-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+
+.world-map-legend-dot--home {
+  background: var(--world-map-home);
+}
+
+.world-map-legend-dot--now {
+  width: 0.5rem;
+  height: 0.5rem;
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+/* Keep prose list styles off the screen-reader country list */
+.world-map ul.sr-only {
+  margin: -1px;
+  padding: 0;
+}
+
+@media (max-width: 736px) {
+  .world-map-frame {
+    padding: var(--spacing-4) var(--spacing-3);
+    border-radius: var(--radius-md);
+  }
+
+  .world-map-caption {
+    font-size: var(--text-xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-map-svg,
+  .world-map-countries--visited path,
+  .world-map-countries--home path,
+  .world-map .world-map-now {
+    animation: none;
+  }
+}

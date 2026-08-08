@@ -1,0 +1,380 @@
+/* ========================================
+   TRAVEL MAP
+   Kazakhstan map with pins for visited cities (about page)
+   ======================================== */
+
+.travel-map {
+  /* Local tokens so the map stays in step with the global palette */
+  --travel-map-land: var(--color-surface-subtle);
+  --travel-map-coast: var(--color-border-alt);
+  --travel-map-water: color-mix(in oklch, var(--color-fg) 13%, transparent);
+  /* Cities I have not visited, drawn in the palette's secondary accent */
+  --travel-map-context: var(--color-accent-secondary);
+  --travel-map-context-glow: color-mix(in srgb, var(--color-accent-secondary) 18%, transparent);
+  --travel-map-dot-size: 0.6rem;
+  --travel-map-context-dot-size: 0.45rem;
+  --travel-map-hit-size: 1.75rem;
+  /* Clears the pin's focus ring, which is half the hit size wide */
+  --travel-map-label-gap: 0.95rem;
+
+  /* Symmetric, since the map can sit between two blocks of prose */
+  margin: var(--spacing-6) 0;
+}
+
+.travel-map-frame {
+  padding: var(--spacing-5) var(--spacing-4);
+  border: 1px solid var(--color-border-bg);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.travel-map-plot {
+  position: relative;
+  width: 100%;
+}
+
+.travel-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: fade-in var(--duration-slow) var(--ease-out) both;
+}
+
+.travel-map-country {
+  fill: var(--travel-map-land);
+  stroke: var(--travel-map-coast);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: fill var(--duration-normal) var(--ease-out);
+}
+
+.travel-map-water path {
+  fill: var(--travel-map-water);
+}
+
+/* ===================
+   PINS
+   =================== */
+
+/* Scoped with .travel-map so the map list beats prose list styles */
+.travel-map .travel-map-pins {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* Both lists span the whole plot, so let clicks through to the pins only */
+  pointer-events: none;
+}
+
+/* Visited pins sit above context pins regardless of document order */
+.travel-map .travel-map-pins--visited {
+  z-index: 1;
+}
+
+.travel-map .travel-map-pins--context {
+  z-index: 0;
+}
+
+.travel-map .travel-map-pin-anchor {
+  position: absolute;
+  left: var(--pin-left);
+  top: var(--pin-top);
+  width: 0;
+  height: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.travel-map-pin-anchor:hover,
+.travel-map-pin-anchor:focus-within {
+  /* Lift the active pin and its label above neighbouring pins */
+  z-index: 2;
+}
+
+.travel-map-pin {
+  /* Per-variant dot metrics, so one set of state rules covers both groups */
+  --pin-dot: var(--travel-map-dot-size);
+  --pin-glow: var(--color-accent-light);
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: var(--travel-map-hit-size);
+  height: var(--travel-map-hit-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  animation: travel-map-pin-in var(--duration-normal) var(--ease-out) both;
+  animation-delay: calc(var(--pin-index, 0) * 40ms + var(--duration-fast));
+}
+
+.travel-map-pin-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--pin-dot);
+  height: var(--pin-dot);
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-bg);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--duration-fast) var(--ease-out),
+    height var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+/* Ringed dot: the capital, and my hometown */
+.travel-map-pin--capital .travel-map-pin-dot,
+.travel-map-pin--hometown .travel-map-pin-dot {
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 5px var(--color-accent-light);
+}
+
+.travel-map-pin--hometown {
+  /* Above neighbouring hit boxes: at mobile widths Shymkent's target overlaps
+     Turkestan's centre, which would make this pin untappable. */
+  z-index: 3;
+}
+
+.travel-map-pin:hover .travel-map-pin-dot,
+.travel-map-pin:focus-visible .travel-map-pin-dot {
+  width: calc(var(--pin-dot) + 0.2rem);
+  height: calc(var(--pin-dot) + 0.2rem);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 6px var(--pin-glow);
+}
+
+.travel-map-pin:focus-visible {
+  /* Inset so the ring hugs the dot and stays clear of the label */
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-full);
+}
+
+/* ===================
+   LABELS
+   =================== */
+
+.travel-map-pin-label {
+  position: absolute;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  /* Stronger than the context labels so visited cities stay the headline */
+  color: var(--color-fg);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.travel-map-pin:hover .travel-map-pin-label,
+.travel-map-pin:focus-visible .travel-map-pin-label {
+  color: var(--color-accent);
+}
+
+/* The capital and my hometown: accent labels, so the two ringed pins read as
+   the notable ones. Hover inverts to the plain label color, keeping the
+   feedback visible (the same trick the context pins use). */
+.travel-map-pin--capital .travel-map-pin-label,
+.travel-map-pin--hometown .travel-map-pin-label {
+  color: var(--color-accent);
+}
+
+.travel-map-pin--capital:hover .travel-map-pin-label,
+.travel-map-pin--capital:focus-visible .travel-map-pin-label,
+.travel-map-pin--hometown:hover .travel-map-pin-label,
+.travel-map-pin--hometown:focus-visible .travel-map-pin-label {
+  color: var(--color-fg-bold);
+}
+
+.travel-map-pin[data-label-placement='right'] .travel-map-pin-label {
+  left: calc(50% + var(--travel-map-label-gap));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.travel-map-pin[data-label-placement='left'] .travel-map-pin-label {
+  right: calc(50% + var(--travel-map-label-gap));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.travel-map-pin[data-label-placement='top'] .travel-map-pin-label {
+  left: 50%;
+  bottom: calc(50% + var(--travel-map-label-gap));
+  transform: translateX(-50%);
+}
+
+.travel-map-pin[data-label-placement='bottom'] .travel-map-pin-label {
+  left: 50%;
+  top: calc(50% + var(--travel-map-label-gap));
+  transform: translateX(-50%);
+}
+
+/* ===================
+   CONTEXT PINS
+   Major cities I have not visited. Kept after the base pin and label rules so
+   these overrides win the ties on specificity.
+   =================== */
+
+.travel-map-pin--context {
+  --pin-dot: var(--travel-map-context-dot-size);
+  --pin-glow: var(--travel-map-context-glow);
+}
+
+.travel-map-pin--context .travel-map-pin-dot {
+  background: var(--travel-map-context);
+}
+
+.travel-map-pin--context:focus-visible {
+  outline-color: var(--travel-map-context);
+}
+
+.travel-map-pin--context .travel-map-pin-label {
+  color: var(--travel-map-context);
+}
+
+.travel-map-pin--context:hover .travel-map-pin-label,
+.travel-map-pin--context:focus-visible .travel-map-pin-label {
+  color: var(--color-fg-bold);
+}
+
+.travel-map-caption {
+  margin-top: var(--spacing-3);
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.travel-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1) var(--spacing-5);
+}
+
+.travel-map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.travel-map-legend-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+
+.travel-map-legend-dot--context {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--travel-map-context);
+}
+
+/* Tap hint only matters where labels collapse into tooltips */
+.travel-map-caption-hint {
+  display: none;
+}
+
+@keyframes travel-map-pin-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ===================
+   NARROW SCREENS
+   Labels become tap/hover tooltips so the map stays readable
+   =================== */
+
+@media (max-width: 736px) {
+  .travel-map {
+    --travel-map-dot-size: 0.55rem;
+    --travel-map-context-dot-size: 0.4rem;
+    --travel-map-hit-size: 1.6rem;
+  }
+
+  .travel-map-frame {
+    padding: var(--spacing-4) var(--spacing-3);
+    border-radius: var(--radius-md);
+  }
+
+  .travel-map-caption {
+    font-size: var(--text-xs);
+  }
+
+  .travel-map-caption-hint {
+    display: block;
+    margin-top: var(--spacing-1);
+  }
+
+  .travel-map-pin .travel-map-pin-label,
+  .travel-map-pin[data-label-placement] .travel-map-pin-label {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: calc(50% + var(--travel-map-label-gap));
+    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: var(--color-bg);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-fg-bold);
+    opacity: 0;
+    transform: translate(-50%, 0.25rem);
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .travel-map-pin:hover .travel-map-pin-label,
+  .travel-map-pin:focus .travel-map-pin-label,
+  .travel-map-pin:active .travel-map-pin-label {
+    opacity: 1;
+    color: var(--color-fg-bold);
+    transform: translate(-50%, 0);
+  }
+
+  /* Touch taps land on :focus rather than :focus-visible */
+  .travel-map-pin:focus .travel-map-pin-dot,
+  .travel-map-pin:active .travel-map-pin-dot {
+    width: calc(var(--pin-dot) + 0.2rem);
+    height: calc(var(--pin-dot) + 0.2rem);
+    box-shadow:
+      0 0 0 2px var(--color-bg),
+      0 0 0 6px var(--pin-glow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .travel-map-svg,
+  .travel-map-pin {
+    animation: none;
+  }
+
+  .travel-map-country,
+  .travel-map-pin-dot,
+  .travel-map-pin-label {
+    transition: none;
+  }
+}
