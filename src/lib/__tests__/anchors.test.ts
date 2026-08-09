@@ -34,10 +34,8 @@ describe('createHeadingId', () => {
     ).toEqual([
       ['Some History', 'some-history'],
       ['I Like', 'i-like'],
-      ['Travel / Geography', 'travel-geography'],
       ['Fun Facts', 'fun-facts'],
       ['I Dream Of', 'i-dream-of'],
-      ['People I Admire', 'people-i-admire'],
     ]);
   });
 });

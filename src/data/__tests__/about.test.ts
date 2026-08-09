@@ -31,35 +31,20 @@ describe('about data', () => {
     );
   });
 
-  it('puts the city map, then the trip copy, then the world map', () => {
-    const travelSection = aboutMarkdown
-      .split('# Travel / Geography')[1]
-      ?.split(/\n# /)[0];
-
-    expect(travelSection?.indexOf('<!-- travel-map -->')).toBeGreaterThan(
-      travelSection?.indexOf('Kyzylorda, and Karagandy.') ?? 0,
-    );
-    expect(travelSection?.indexOf('Outside Kazakhstan')).toBeGreaterThan(
-      travelSection?.indexOf('<!-- travel-map -->') ?? 0,
-    );
-    expect(travelSection?.indexOf('<!-- world-map -->')).toBeGreaterThan(
-      travelSection?.indexOf('Outside Kazakhstan') ?? 0,
-    );
-  });
-
-  it('names every country the world map highlights', () => {
-    for (const country of ['Russia', 'Uzbekistan', 'Korea', 'Thailand']) {
-      expect(aboutMarkdown).toContain(country);
-    }
-    expect(aboutMarkdown).toContain('Tokyo');
+  // Travel / Geography and People I Admire are currently disabled. They are
+  // preserved verbatim in the block comment at the top of src/data/about.ts;
+  // restore these assertions alongside them.
+  it('omits the disabled sections and their map embeds', () => {
+    expect(aboutMarkdown).not.toContain('# Travel / Geography');
+    expect(aboutMarkdown).not.toContain('# People I Admire');
+    expect(aboutMarkdown).not.toContain('<!-- travel-map -->');
+    expect(aboutMarkdown).not.toContain('<!-- world-map -->');
   });
 
   it('contains personal sections', () => {
     expect(aboutMarkdown).toContain('# I Like');
-    expect(aboutMarkdown).toContain('# Travel / Geography');
     expect(aboutMarkdown).toContain('# Fun Facts');
     expect(aboutMarkdown).toContain('# I Dream Of');
-    expect(aboutMarkdown).toContain('# People I Admire');
   });
 
   it('contains I Like bullets in the preferred order', () => {
@@ -89,15 +74,6 @@ describe('about data', () => {
     expect(aboutMarkdown).toContain('0.2% to 1%');
   });
 
-  it('contains admired people links', () => {
-    expect(aboutMarkdown).toContain(
-      '[Margulan Seissembai](https://www.youtube.com/@Margulan.Seissembai)',
-    );
-    expect(aboutMarkdown).toContain(
-      '[Marques Brownlee](https://www.youtube.com/user/marquesbrownlee)',
-    );
-  });
-
   it('contains valid markdown links', () => {
     // Check for markdown link format [text](url)
     const linkRegex = /\[.+?\]\(.+?\)/g;
@@ -117,10 +93,8 @@ describe('about data', () => {
       '# Intro',
       '# Some History',
       '# I Like',
-      '# Travel / Geography',
       '# Fun Facts',
       '# I Dream Of',
-      '# People I Admire',
     ]);
   });
 });

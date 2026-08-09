@@ -84,8 +84,22 @@ Lead paragraph.
     ).toHaveAttribute('id', 'travel-geography');
   });
 
+  // The embed mechanism is still wired up in Sections.tsx even though the real
+  // about copy no longer uses it, so this drives it from a fixture.
   it('splices both maps in at their markers', () => {
-    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const { container } = render(
+      <AboutContent
+        markdown={`# Travel / Geography
+
+- I am originally from Kazakhstan.
+
+<!-- travel-map -->
+
+Outside Kazakhstan, I went to Russia first.
+
+<!-- world-map -->`}
+      />,
+    );
 
     const travelSection = container.querySelector(
       '.about-section:has(#travel-geography)',
@@ -183,14 +197,12 @@ Lead paragraph.
     expect(html).toContain('id="some-history"');
     expect(html).toContain('href="#i-like"');
     expect(html).toContain('id="i-like"');
-    expect(html).toContain('href="#travel-geography"');
-    expect(html).toContain('id="travel-geography"');
     expect(html).toContain('href="#fun-facts"');
     expect(html).toContain('id="fun-facts"');
     expect(html).toContain('href="#i-dream-of"');
     expect(html).toContain('id="i-dream-of"');
-    expect(html).toContain('href="#people-i-admire"');
-    expect(html).toContain('id="people-i-admire"');
+    expect(html).not.toContain('href="#travel-geography"');
+    expect(html).not.toContain('href="#people-i-admire"');
     expect(html).not.toContain('href="#languages"');
     expect(html).not.toContain('id="languages"');
     expect(html).not.toContain('href="#engineering-focus"');
@@ -205,32 +217,32 @@ Lead paragraph.
 
     const nav = screen.getByRole('navigation', { name: 'About sections' });
     const navLink = within(nav).getByRole('link', {
-      name: 'People I Admire',
+      name: 'I Dream Of',
     });
 
     navLink.click();
 
     await waitFor(() => {
-      expect(window.location.hash).toBe('#people-i-admire');
+      expect(window.location.hash).toBe('#i-dream-of');
     });
     expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'People I Admire',
+      'I Dream Of',
     );
 
     const heading = screen.getByRole('heading', {
-      name: 'People I Admire',
+      name: 'I Dream Of',
     });
     const permalink = within(heading).getByRole('link', {
-      name: 'People I Admire',
+      name: 'I Dream Of',
     });
 
     permalink.click();
 
     await waitFor(() => {
-      expect(window.location.hash).toBe('#people-i-admire');
+      expect(window.location.hash).toBe('#i-dream-of');
     });
     expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'People I Admire',
+      'I Dream Of',
     );
   });
 });
