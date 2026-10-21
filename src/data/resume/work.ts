@@ -48,6 +48,7 @@ const work: Position[] = [
     applications.`,
     highlights: [
       'Own the sensor-fusion foundation for the scanning platform: calibration, timing, and synchronization across LiDAR, IMU, and camera.',
+      'Added hVox SLAM, a hierarchy-based SLAM approach, to the pipeline together with the SLAM team.',
       'Replaced both production perception stages — dynamic object removal and map colorization — now running on every scanner model.',
       'Led the port from Python to C++ and the move off Open3D onto in-house geometry built for the scanners.',
       'Rebuilt the scanner web tool end to end, retiring its PHP stack.',
@@ -67,6 +68,7 @@ const work: Position[] = [
     // Research and Presentations, so they are not restated as a highlight.
     highlights: [
       'Delivered automated point-cloud inspection for shipbuilding components in joint research with Hyundai Heavy Industries, who built on the algorithms.',
+      'Developed registration of multi-station terrestrial laser scanner (TLS) scans combined with Structure-from-Motion (SfM), enabling reconstruction of large scanned objects.',
       "Built an LLM-assisted search platform for a partner's industrial CAD library.",
     ],
   },
