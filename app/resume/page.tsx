@@ -24,7 +24,7 @@ export const metadata: Metadata = createPageMetadata({
   path: '/resume/',
 });
 
-const CV_FILE_ID = '171gzyjEcQsbkxKGMvb0nsdOPVxOFPTHd';
+const CV_FILE_ID = '14Ho9XJoFFZa-k_HAfmRWTiEqZzfQFOd-';
 const CV_DOWNLOAD_URL = `https://drive.google.com/uc?export=download&id=${CV_FILE_ID}`;
 const CV_VIEW_URL = `https://drive.google.com/file/d/${CV_FILE_ID}/view?usp=sharing`;
 
