@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import ResumePage from '../page';
 
-const cvFileId = '171gzyjEcQsbkxKGMvb0nsdOPVxOFPTHd';
+const cvFileId = '14Ho9XJoFFZa-k_HAfmRWTiEqZzfQFOd-';
 const cvDownloadUrl = `https://drive.google.com/uc?export=download&id=${cvFileId}`;
 const cvViewUrl = `https://drive.google.com/file/d/${cvFileId}/view?usp=sharing`;
 
