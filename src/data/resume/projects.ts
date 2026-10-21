@@ -85,9 +85,10 @@ export interface Project {
 }
 
 // Order is editorial, not chronological: the point-cloud processing work leads,
-// then sensor timing, then the operator application, with the earlier research
-// project last. No entry carries a date, so nothing here is sorted
-// automatically — this sequence is the intended one.
+// then sensor timing, then the operator application, then the open-source
+// work, with the earlier research project last. Only the open-source entry
+// carries a date, so nothing here is sorted automatically — this sequence is
+// the intended one.
 const projects: Project[] = [
   {
     title: 'Dynamic Object Removal',
@@ -127,7 +128,7 @@ const projects: Project[] = [
     role: 'VITOM Inc. · SLAM Team',
     overview:
       'Developed a colorization pipeline that projects wide-angle RGB imagery onto SLAM-reconstructed LiDAR maps.',
-    metrics: [{ value: '1–2 px', label: 'projection accuracy at 1920×1440' }],
+    metrics: [{ value: '0.5–1 px', label: 'projection accuracy at 1920×1440' }],
     contribution: [
       'Architected the pipeline to color batches of LiDAR frames against a shared image, replacing per-frame processing.',
       'Built the motion-compensation step that aligns each scan to its paired image, interpolating scanner pose from IMU orientation to correct the capture-time difference.',
@@ -140,7 +141,7 @@ const projects: Project[] = [
       'Colorization is highly sensitive to timing error — a few milliseconds of clock offset is invisible in geometry but visibly smears color across edges during rotation.',
     ],
     outcomes: [
-      'Achieved 1–2 pixel projection accuracy at 1920×1440.',
+      'Achieved 0.5–1 pixel projection accuracy at 1920×1440.',
       'Replaced the previous method as the default across all VITOM scanner models — including Robin, Parrot, and MK3 — with improved speed and stability.',
     ],
     tech: ['Python', 'Open3D', 'NumPy', 'Fisheye projection'],
@@ -231,6 +232,29 @@ const projects: Project[] = [
       'pytest',
       'systemd',
     ],
+  },
+  {
+    title: 'CloudCompare Open-Source Contributions',
+    role: 'Open source · CloudCompare',
+    link: 'https://github.com/CloudCompare/CloudCompare/pulls?q=is%3Apr+author%3AcapCafu+is%3Amerged',
+    date: '2025',
+    dateLabel: '2025 – now',
+    overview:
+      'Contributions to CloudCompare, the open-source 3D point-cloud and mesh processing application, merged upstream.',
+    metrics: [{ value: '24', label: 'merged pull requests' }],
+    contribution: [
+      'Added a helper that runs a long operation on a worker thread while the GUI keeps handling events, so existing call sites did not need rewriting.',
+      'Moved the SOR and noise filters, distance and geometric-feature computation, BIN file I/O, and the M3C2, RANSAC, PCL, Poisson reconstruction, and CANUPO plugins onto it.',
+      'Fixed point-cloud and mesh I/O: ASCII files with legacy Mac line endings or too many columns, LAS export with more than 341 scalar fields, and OBJ materials referenced with Windows path separators.',
+      'Drew normals as lines without a geometry shader, and fixed macOS packaging, opening files from the Finder, and trackpad zoom.',
+    ],
+    challenges: [
+      'The algorithms show and hide their own progress dialogs, so once the work ran on a worker thread those calls had to be routed back to the GUI thread.',
+    ],
+    outcomes: [
+      'Filters and plugins keep the application responsive, with live progress, while processing large clouds.',
+    ],
+    tech: ['C++', 'Qt', 'OpenGL'],
   },
   {
     title: 'Automated Ship Component Inspection',
